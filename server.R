@@ -4,7 +4,7 @@ shinyServer(function(input, output){
         datatable(music_df, rownames=FALSE) %>% 
         formatStyle(input$selected,
             background="skyblue", fontWeight='bold'
-        ) 
+        )
     })
     output$finding1 <- renderPlot(
       music_df %>% group_by(year) %>% summarise(MeanDurationMin= mean(duration_ms/1000/60)) %>%
