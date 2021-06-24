@@ -11,49 +11,52 @@ shinyServer(function(input, output){
         ggplot(aes(x = year, y = MeanDurationMin)) +
           geom_line(color = 'blue') +
           theme_bw() +
-          ggtitle("Average Duration of Songs by Year (min)") + 
           xlab("Year") +
+          scale_x_continuous(n.breaks = 12) +
           ylab("Minutes")
     )
+    output$finding2 <- renderPlot(
+      music_df %>%
+        ggplot(aes(x = as.integer(key), y = year_bin, fill = year_bin)) +
+        geom_density_ridges() +
+        theme_bw() +
+        xlab("Key") +
+        ylab("Density")
+    )
+    output$finding3 <- renderPlot(
+      music_df %>% group_by(year) %>% summarise(MeanLoudness = mean(loudness), MeanAcoustic = mean(acousticness)) %>%
+        ggplot(aes(x = year)) +
+        geom_line(aes(y = MeanLoudness), color = 'blue') +
+        geom_line(aes(y = (MeanAcoustic-7)), color = 'red') +
+        scale_y_continuous(sec.axis = sec_axis(~.+7, name = "MeanAcoustic")) + 
+        scale_x_continuous(n.breaks = 12)+
+        xlab("Year")
+    )
+    output$finding4 <- renderPlot(
+      music_df %>% group_by(year, Gender) %>% summarise(n = sum(n())) %>% 
+        mutate(Percentage = n/sum(n)) %>% 
+        ggplot(aes(x = year, y = Percentage, fill = Gender)) +
+        geom_bar(stat = 'identity') +
+        theme_bw() +
+        xlab("Year") +
+        scale_x_continuous(n.breaks = 12) + 
+        scale_y_continuous(labels = percent)
+    )
+    output$explore <- renderPlot(  
+      music_df_sum %>% 
+        ggplot(
+          aes(
+            x = eval(parse(text = paste0('music_df_sum','$',as.character(input$xaxis)))),
+            y = eval(parse(text = paste0('music_df_sum','$',as.character(input$yaxis))))
+          )) +
+          geom_point(aes(size = 3, fill = year_bin), pch = 21, color = 'black') +
+          xlab(as.character(input$xaxis)) +
+          ylab(as.character(input$yaxis)) +
+          theme_bw() + 
+          guides(size = FALSE) + 
+          theme(legend.title = element_text(size=14, face="bold")) +
+          guides(fill = guide_legend(override.aes = list(size = 6))) +
+          scale_fill_discrete(name = "Decade") +
+          scale_fill_brewer(palette="PiYG")
+    )
 })
-  
-
-
-
-
-
-  
-#   observe({
-#     dest <- unique(flights %>%
-#                      filter(flights$origin == input$origin) %>%
-#                      .$dest)
-#     updateSelectizeInput(
-#       session, "dest",
-#       choices = dest,
-#       selected = dest[1])
-#   })
-#   
-#   flights_delay <- reactive({
-#     flights %>%
-#       filter(origin == input$origin & dest == input$dest) %>%
-#       group_by(carrier) %>%
-#       summarise(n = n(),
-#                 departure = mean(dep_delay),
-#                 arrival = mean(arr_delay))
-#   })
-# 
-#   output$delay <- renderPlot(
-#     flights_delay() %>%
-#       gather(key = type, value = delay, departure, arrival) %>%
-#       ggplot(aes(x = carrier, y = delay, fill = type)) +
-#       geom_col(position = "dodge") +
-#       ggtitle("Average delay")
-#   )
-# 
-#   output$count <- renderPlot(
-#     flights_delay() %>%
-#       ggplot(aes(x = carrier, y = n)) +
-#       geom_col(fill = "lightblue") +
-#       ggtitle("Number of flights")
-#   )
-# }

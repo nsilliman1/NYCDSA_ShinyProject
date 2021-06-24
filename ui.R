@@ -50,44 +50,54 @@ shinyUI(
             fluidRow(
               box(title = "Finding 1: Song Duration", status = 'warning', solidHeader = TRUE,
                   plotOutput("finding1")),
-              box(status = "warning", "Box content")
+              box(title = "Finding 2: Key Variation by Decade", status = 'warning', solidHeader = TRUE,
+                  plotOutput("finding2"))
             ),
-            
             fluidRow(
-              box(
-                title = "Title 1", width = 4, solidHeader = TRUE, status = "primary",
-                "Box content"
-              ),
-              box(
-                title = "Title 2", width = 4, solidHeader = TRUE,
-                "Box content"
-              ),
-              box(
-                title = "Title 1", width = 4, solidHeader = TRUE, status = "warning",
-                "Box content"
-              )
+              box(status = 'warning',
+                  "Song length has obvioulsy changed over the years. Average song length in the 60s was under 3min, then it lengthend to above 4min
+                  in the mid 70s through the mid 00s, dropping down too just under 4min in the 10s. This could have happened for a variety of reasons inlduing 
+                  repording and distribution technology, marketing strategy of distributers, and cultural shifts."),
+              box(status = 'warning',
+                  "Overtime, from the 1960s to the 2010s, it seems there has been a drop in key variation. In the 1960s, there seems to be a 
+                  somewhat even distribution of key usage. Then as the decades continued, more concentration seemed to occur. I would think
+                  that more varied use of keys would come from more skilled musicians and lead to more complex expressions. This could
+                  also be sourced from what is considered 'popular music' in each decade. More exploration is needed
+                  in this area.")
             ),
-            
             fluidRow(
-              box(
-                width = 4, background = "black",
-                "A box with a solid black background"
-              ),
-              box(
-                title = "Title 5", width = 4, background = "light-blue",
-                "A box with a solid light-blue background"
-              ),
-              box(
-                title = "Title 6",width = 4, background = "maroon",
-                "A box with a solid maroon background"
-              )
+              box(title = "Finding 3: Evolution of Loudness vs Acousticness", status = 'warning', solidHeader = TRUE,
+                  plotOutput("finding3")),
+              box(title = "Finding 4: Change in Group Gender", status = 'warning', solidHeader = TRUE,
+                  plotOutput("finding4")),
+            ),
+            fluidRow(
+              box(status = 'warning',
+                  "Music overtime has seen a shift away from Acoustic music. This has probably shifted as new elecrtronic expression 
+                  increased in the 1990s with new technology. This trend is correlated with an increase in the 'Loudness' of songs
+                  over the years."),
+              box(status = 'warning',
+                  "The gender of groups has flucuated over time. There seems to be a consistenet trend of more and more female
+                  artists breaking into the top 100 list. Groups conversly seen a decline from the mid 1960s to the 2010s.")
             )
          ),
-        tabItem(tabName = "exploration", "to be replaced with datatable"),
-        tabItem(tabName = "dataset", DT::dataTableOutput("table"))
+        tabItem(tabName = "exploration", 
+                fluidRow(
+                  box(status = 'warning',
+                      selectizeInput(inputId = "xaxis",
+                                    label = "X-Axis",
+                                    choices = colnames(music_df_sum)[2:length(m)],
+                                    selected = 'Duration'),
+                      selectizeInput(inputId = "yaxis",
+                                    label = "Y-Axis",
+                                    choices = colnames(music_df_sum)[2:length(m)],
+                                    selected = 'Energy'),
+                      plotOutput("explore")
+                     )
+                  )
+        ),
+        tabItem(tabName = "dataset", DT::dataTableOutput("table", width = 300))
       )
     )
   )
 )
-
-
