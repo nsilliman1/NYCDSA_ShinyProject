@@ -95,7 +95,7 @@ shinyUI(
                      )
                   )
         ),
-        tabItem(tabName = "dataset", DT::dataTableOutput("table", width = 300))
+        tabItem(tabName = "dataset", DT::dataTableOutput("table"))
       )
     )
   )

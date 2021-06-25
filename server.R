@@ -1,10 +1,9 @@
 
 shinyServer(function(input, output){
     output$table <- DT::renderDataTable({
-        datatable(music_df, rownames=FALSE) %>% 
+        datatable(music_df, rownames = FALSE, options = list(scrollX = TRUE), width = 50) %>% 
         formatStyle(input$selected,
-            background="skyblue", fontWeight='bold'
-        )
+            background="skyblue", fontWeight='bold')
     })
     output$finding1 <- renderPlot(
       music_df %>% group_by(year) %>% summarise(MeanDurationMin= mean(duration_ms/1000/60)) %>%
@@ -27,9 +26,12 @@ shinyServer(function(input, output){
       music_df %>% group_by(year) %>% summarise(MeanLoudness = mean(loudness), MeanAcoustic = mean(acousticness)) %>%
         ggplot(aes(x = year)) +
         geom_line(aes(y = MeanLoudness), color = 'blue') +
-        geom_line(aes(y = (MeanAcoustic-7)), color = 'red') +
-        scale_y_continuous(sec.axis = sec_axis(~.+7, name = "MeanAcoustic")) + 
-        scale_x_continuous(n.breaks = 12)+
+        geom_line(aes(y = (MeanAcoustic-7)*1), color = 'red') +
+        scale_y_continuous(sec.axis = sec_axis(~(.+7)/1, name = "MeanAcoustic")) +
+        theme(
+          axis.title.y = element_text(color = 'blue', size=13),
+          axis.title.y.right = element_text(color = 'red', size=13)) + 
+        scale_x_continuous(n.breaks = 12) +
         xlab("Year")
     )
     output$finding4 <- renderPlot(
