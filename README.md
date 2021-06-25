@@ -2,7 +2,7 @@ NYCDSA_ShinyProject
 
 This is the first project in my NYCDSA program. This project demonstrates the use of R, ggplot, and R shiny.
 
-I chose to do this project after visitng a piano bar, which reminnded me of how I tend to enjoy music from the 60's and 70's more than modern day music.
+I chose to do this project after visitng a piano bar, which reminded me of how I tend to enjoy music from the 60's and 70's more than modern day music.
 
 I grabbed the data from the following GitHub project:
 https://github.com/RosebudAnwuri/TheArtandScienceofData/tree/master/The%20Making%20of%20Great%20Music/data
